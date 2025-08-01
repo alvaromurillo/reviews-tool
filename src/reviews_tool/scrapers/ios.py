@@ -185,21 +185,35 @@ class IOSScraper:
                 try:
                     # Extract review data
                     title_elem = entry.find("title")
-                    title = clean_text(title_elem.text) if isinstance(title_elem, Tag) and title_elem.text else ""
+                    title = (
+                        clean_text(title_elem.text)
+                        if isinstance(title_elem, Tag) and title_elem.text
+                        else ""
+                    )
 
                     content_elem = entry.find("content")
-                    text = clean_text(content_elem.text) if isinstance(content_elem, Tag) and content_elem.text else ""
+                    text = (
+                        clean_text(content_elem.text)
+                        if isinstance(content_elem, Tag) and content_elem.text
+                        else ""
+                    )
 
                     # Rating from im:rating
                     rating_elem = entry.find("im:rating")
-                    rating = int(rating_elem.text) if isinstance(rating_elem, Tag) and rating_elem.text else 5
+                    rating = (
+                        int(rating_elem.text)
+                        if isinstance(rating_elem, Tag) and rating_elem.text
+                        else 5
+                    )
 
                     # Author
                     author_elem = entry.find("author")
                     if author_elem and isinstance(author_elem, Tag):
                         name_elem = author_elem.find("name")
                         user_name = (
-                            clean_text(name_elem.text) if isinstance(name_elem, Tag) and name_elem.text else "Anonymous"
+                            clean_text(name_elem.text)
+                            if isinstance(name_elem, Tag) and name_elem.text
+                            else "Anonymous"
                         )
                     else:
                         user_name = "Anonymous"
@@ -213,7 +227,11 @@ class IOSScraper:
 
                     # Version from im:version
                     version_elem = entry.find("im:version")
-                    version = clean_text(version_elem.text) if isinstance(version_elem, Tag) and version_elem.text else None
+                    version = (
+                        clean_text(version_elem.text)
+                        if isinstance(version_elem, Tag) and version_elem.text
+                        else None
+                    )
 
                     # Create review ID
                     review_id = f"ios_{hash(user_name + title + str(date.timestamp()))}_{int(time.time())}"

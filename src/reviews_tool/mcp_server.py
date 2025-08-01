@@ -301,7 +301,7 @@ async def main_server(verbose: bool = False) -> None:
                 server_version="0.1.0",
                 capabilities=server_instance.server.get_capabilities(
                     notification_options=None,  # type: ignore[arg-type]
-                    experimental_capabilities={}
+                    experimental_capabilities={},
                 ),
             ),
         )
