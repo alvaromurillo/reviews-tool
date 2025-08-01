@@ -146,7 +146,7 @@ class AndroidScraper:
         country_code = country.lower() if country else "us"
 
         # Prepare filters for our response
-        filters = {}
+        filters: Dict[str, Any] = {}
         if language:
             filters["language"] = language.lower()
         if country:

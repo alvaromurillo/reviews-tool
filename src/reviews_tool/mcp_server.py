@@ -300,7 +300,7 @@ async def main_server(verbose: bool = False) -> None:
                 server_name="reviews-tool",
                 server_version="0.1.0",
                 capabilities=server_instance.server.get_capabilities(
-                    notification_options=None, experimental_capabilities=None
+                    notification_options={}, experimental_capabilities={}
                 ),
             ),
         )

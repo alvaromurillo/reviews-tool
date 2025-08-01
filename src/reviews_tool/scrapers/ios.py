@@ -6,7 +6,7 @@ from typing import List, Optional, Dict, Any
 from urllib.parse import quote
 
 import requests
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, Tag
 
 from ..models import Review, ReviewsResponse
 from ..utils import (
@@ -180,35 +180,35 @@ class IOSScraper:
                 try:
                     # Extract review data
                     title_elem = entry.find("title")
-                    title = clean_text(title_elem.text) if title_elem else ""
+                    title = clean_text(title_elem.text) if title_elem and hasattr(title_elem, 'text') else ""
 
                     content_elem = entry.find("content")
-                    text = clean_text(content_elem.text) if content_elem else ""
+                    text = clean_text(content_elem.text) if content_elem and hasattr(content_elem, 'text') else ""
 
                     # Rating from im:rating
                     rating_elem = entry.find("im:rating")
-                    rating = int(rating_elem.text) if rating_elem else 5
+                    rating = int(rating_elem.text) if rating_elem and hasattr(rating_elem, 'text') else 5
 
                     # Author
                     author_elem = entry.find("author")
-                    if author_elem:
+                    if author_elem and isinstance(author_elem, Tag):
                         name_elem = author_elem.find("name")
                         user_name = (
-                            clean_text(name_elem.text) if name_elem else "Anonymous"
+                            clean_text(name_elem.text) if name_elem and hasattr(name_elem, 'text') else "Anonymous"
                         )
                     else:
                         user_name = "Anonymous"
 
                     # Date
                     updated_elem = entry.find("updated")
-                    if updated_elem:
+                    if updated_elem and hasattr(updated_elem, 'text'):
                         date = parse_date_flexible(updated_elem.text) or datetime.now()
                     else:
                         date = datetime.now()
 
                     # Version from im:version
-                    version_elem = entry.find("im:version")
-                    version = clean_text(version_elem.text) if version_elem else None
+                    version_elem = entry.find("im:version") 
+                    version = clean_text(version_elem.text) if version_elem and hasattr(version_elem, 'text') else None
 
                     # Create review ID
                     review_id = f"ios_{hash(user_name + title + str(date.timestamp()))}_{int(time.time())}"
@@ -313,7 +313,7 @@ class IOSScraper:
                 numeric_app_id = app_id
 
         # Prepare filters for response
-        filters = {}
+        filters: Dict[str, Any] = {}
         if language:
             filters["language"] = language.lower()
         if country:

@@ -10,9 +10,20 @@ this_directory = os.path.abspath(os.path.dirname(__file__))
 with open(os.path.join(this_directory, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
 
-# Read requirements
+# Read requirements and separate core from optional
 with open('requirements.txt') as f:
-    requirements = [line.strip() for line in f if line.strip() and not line.startswith('#')]
+    all_requirements = [line.strip() for line in f if line.strip() and not line.startswith('#')]
+
+# Separate core requirements from optional ones
+core_requirements = []
+mcp_requirements = []
+
+for req in all_requirements:
+    if 'mcp>=' in req:
+        # Extract the actual requirement without the python_version condition
+        mcp_requirements.append(req.split(';')[0].strip())
+    else:
+        core_requirements.append(req)
 
 setup(
     name="reviews-tool",
@@ -40,7 +51,10 @@ setup(
         "Topic :: Internet :: WWW/HTTP :: Indexing/Search",
     ],
     python_requires=">=3.8",
-    install_requires=requirements,
+    install_requires=core_requirements,
+    extras_require={
+        "mcp": mcp_requirements,
+    },
     entry_points={
         "console_scripts": [
             "reviews-tool=reviews_tool.cli:cli",
