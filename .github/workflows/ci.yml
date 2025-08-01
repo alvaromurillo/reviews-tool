@@ -35,6 +35,12 @@ jobs:
         pip install -r requirements.txt
         pip install -e .
 
+    - name: Verify installation
+      run: |
+        python -c "import reviews_tool; print('Package installed successfully')"
+        python -c "from src.reviews_tool import cli; print('CLI module imported successfully')"
+        pytest --collect-only -q
+
     - name: Run tests
       run: |
         pytest --verbose --tb=short -m "not integration"
@@ -62,6 +68,10 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
         pip install -e .
+
+    - name: Verify installation
+      run: |
+        python -c "import reviews_tool; print('Package installed successfully')"
 
     - name: Lint with flake8
       run: |
@@ -94,6 +104,10 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
         pip install -e .
+
+    - name: Verify installation
+      run: |
+        python -c "import reviews_tool; print('Package installed successfully')"
 
     - name: Type check with mypy
       run: |
