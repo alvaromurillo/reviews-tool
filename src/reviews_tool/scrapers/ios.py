@@ -172,7 +172,12 @@ class IOSScraper:
             soup = BeautifulSoup(rss_content, "xml")
             entries = soup.find_all("entry")
 
-            for entry in entries:
+            for entry_element in entries:
+                # Cast to Tag since find_all returns Tag objects
+                entry = entry_element if isinstance(entry_element, Tag) else None
+                if not entry:
+                    continue
+
                 # Skip the first entry which is usually app info
                 if entry.find("im:name"):
                     continue
@@ -180,35 +185,35 @@ class IOSScraper:
                 try:
                     # Extract review data
                     title_elem = entry.find("title")
-                    title = clean_text(title_elem.text) if title_elem and hasattr(title_elem, 'text') else ""
+                    title = clean_text(title_elem.text) if isinstance(title_elem, Tag) and title_elem.text else ""
 
                     content_elem = entry.find("content")
-                    text = clean_text(content_elem.text) if content_elem and hasattr(content_elem, 'text') else ""
+                    text = clean_text(content_elem.text) if isinstance(content_elem, Tag) and content_elem.text else ""
 
                     # Rating from im:rating
                     rating_elem = entry.find("im:rating")
-                    rating = int(rating_elem.text) if rating_elem and hasattr(rating_elem, 'text') else 5
+                    rating = int(rating_elem.text) if isinstance(rating_elem, Tag) and rating_elem.text else 5
 
                     # Author
                     author_elem = entry.find("author")
                     if author_elem and isinstance(author_elem, Tag):
                         name_elem = author_elem.find("name")
                         user_name = (
-                            clean_text(name_elem.text) if name_elem and hasattr(name_elem, 'text') else "Anonymous"
+                            clean_text(name_elem.text) if isinstance(name_elem, Tag) and name_elem.text else "Anonymous"
                         )
                     else:
                         user_name = "Anonymous"
 
                     # Date
                     updated_elem = entry.find("updated")
-                    if updated_elem and hasattr(updated_elem, 'text'):
+                    if isinstance(updated_elem, Tag) and updated_elem.text:
                         date = parse_date_flexible(updated_elem.text) or datetime.now()
                     else:
                         date = datetime.now()
 
                     # Version from im:version
-                    version_elem = entry.find("im:version") 
-                    version = clean_text(version_elem.text) if version_elem and hasattr(version_elem, 'text') else None
+                    version_elem = entry.find("im:version")
+                    version = clean_text(version_elem.text) if isinstance(version_elem, Tag) and version_elem.text else None
 
                     # Create review ID
                     review_id = f"ios_{hash(user_name + title + str(date.timestamp()))}_{int(time.time())}"

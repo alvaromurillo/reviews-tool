@@ -65,7 +65,7 @@ class ReviewsToolMCPServer:
     def _setup_handlers(self) -> None:
         """Set up MCP server handlers."""
 
-        @self.server.list_tools()
+        @self.server.list_tools()  # type: ignore[no-untyped-call]
         async def handle_list_tools() -> ListToolsResult:
             """List available tools."""
             return ListToolsResult(
@@ -300,7 +300,8 @@ async def main_server(verbose: bool = False) -> None:
                 server_name="reviews-tool",
                 server_version="0.1.0",
                 capabilities=server_instance.server.get_capabilities(
-                    notification_options={}, experimental_capabilities={}
+                    notification_options=None,  # type: ignore[arg-type]
+                    experimental_capabilities={}
                 ),
             ),
         )

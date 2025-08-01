@@ -6,9 +6,28 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This is a Python tool for fetching app reviews from Google Play Store (Android) and App Store (iOS). It provides both a CLI interface and an MCP (Model Context Protocol) server for AI integration. The tool scrapes reviews with various filtering options and outputs structured JSON data.
 
+## Environment Setup
+
+**IMPORTANT**: This project uses a virtual environment. Before running any Python commands:
+
+```bash
+# Activate the virtual environment
+source venv/bin/activate
+
+# Or if venv doesn't exist, create it first:
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+```
+
+**Always check if venv is activated before running Python commands!**
+
 ## Development Commands
 
 ```bash
+# ALWAYS activate venv first!
+source venv/bin/activate
+
 # Install dependencies
 pip install -r requirements.txt
 
@@ -34,6 +53,18 @@ reviews-tool search com.whatsapp --store android --limit 10
 # Start MCP server
 reviews-tool serve --port 8000
 ```
+
+## Troubleshooting
+
+### Python Environment Issues
+- **Use `python3` not `python`** - python symlink doesn't exist on this system
+- **Always activate venv first** - system pip is externally managed by Homebrew
+- **If packages missing**: Install with `pip install -r requirements.txt` (in venv)
+
+### Common Commands
+- Check if venv active: `which python` should show venv path
+- Deactivate venv: `deactivate`
+- Re-activate venv: `source venv/bin/activate`
 
 ## Architecture
 
