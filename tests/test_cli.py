@@ -67,7 +67,7 @@ class TestCLI:
         assert result.exit_code == 0
         assert "--port" in result.output
 
-    @patch('src.reviews_tool.cli.AndroidScraper')
+    @patch('reviews_tool.cli.AndroidScraper')
     def test_search_android_basic(self, mock_android_class):
         """Test basic Android search command."""
         # Setup mock
@@ -103,7 +103,7 @@ class TestCLI:
             date_to=None
         )
 
-    @patch('src.reviews_tool.cli.IOSScraper')
+    @patch('reviews_tool.cli.IOSScraper')
     def test_search_ios_basic(self, mock_ios_class):
         """Test basic iOS search command."""
         # Setup mock
@@ -133,7 +133,7 @@ class TestCLI:
         assert output_data['app_id'] == '123456789'
         assert output_data['store'] == 'ios'
 
-    @patch('src.reviews_tool.cli.AndroidScraper')
+    @patch('reviews_tool.cli.AndroidScraper')
     def test_search_with_all_filters(self, mock_android_class):
         """Test search command with all filter options."""
         mock_scraper = Mock()
@@ -165,7 +165,7 @@ class TestCLI:
         assert expected_call.kwargs['date_to'] == datetime(2023, 12, 31, 0, 0)
         assert expected_call.kwargs['has_dev_response'] == True
 
-    @patch('src.reviews_tool.cli.AndroidScraper')
+    @patch('reviews_tool.cli.AndroidScraper')
     def test_search_no_dev_response_filter(self, mock_android_class):
         """Test search command with --no-dev-response flag."""
         mock_scraper = Mock()
@@ -216,7 +216,7 @@ class TestCLI:
         assert result.exit_code != 0
         assert "Invalid value for '--date-from': 'invalid-date' does not match the format" in result.output
 
-    @patch('src.reviews_tool.cli.AndroidScraper')
+    @patch('reviews_tool.cli.AndroidScraper')
     def test_search_with_output_file(self, mock_android_class):
         """Test search command with output file option."""
         mock_scraper = Mock()
@@ -249,7 +249,7 @@ class TestCLI:
             if os.path.exists(tmp_filename):
                 os.unlink(tmp_filename)
 
-    @patch('src.reviews_tool.cli.AndroidScraper')
+    @patch('reviews_tool.cli.AndroidScraper')
     def test_search_scraper_exception(self, mock_android_class):
         """Test search command when scraper raises exception."""
         mock_scraper = Mock()
@@ -265,7 +265,7 @@ class TestCLI:
         assert "Error:" in result.output
         assert "Invalid app ID" in result.output
 
-    @patch('src.reviews_tool.cli.AndroidScraper')
+    @patch('reviews_tool.cli.AndroidScraper')
     def test_search_empty_results(self, mock_android_class):
         """Test search command with empty results."""
         mock_scraper = Mock()
@@ -297,7 +297,7 @@ class TestCLI:
         assert result.exit_code != 0
         assert "Missing argument" in result.output
 
-    @patch('src.reviews_tool.cli.AndroidScraper')
+    @patch('reviews_tool.cli.AndroidScraper')
     def test_search_date_range_validation(self, mock_android_class):
         """Test search command with date range where from > to."""
         mock_scraper = Mock()
@@ -314,7 +314,7 @@ class TestCLI:
         assert result.exit_code != 0
         assert "Error: --date-from cannot be later than --date-to" in result.output
 
-    @patch('src.reviews_tool.cli.AndroidScraper')
+    @patch('reviews_tool.cli.AndroidScraper')
     def test_search_pretty_print_format(self, mock_android_class):
         """Test that JSON output is properly formatted."""
         mock_scraper = Mock()
@@ -335,7 +335,7 @@ class TestCLI:
         # Should be valid JSON
         json.loads(result.output)
 
-    @patch('src.reviews_tool.mcp_server.start_server')
+    @patch('reviews_tool.mcp_server.start_server')
     def test_serve_command_default_port(self, mock_start_server):
         """Test serve command with default port."""
         result = self.runner.invoke(cli, ['serve'])
@@ -343,7 +343,7 @@ class TestCLI:
         assert result.exit_code == 0
         mock_start_server.assert_called_once_with(host='localhost', port=8000, verbose=False)
 
-    @patch('src.reviews_tool.mcp_server.start_server')
+    @patch('reviews_tool.mcp_server.start_server')
     def test_serve_command_custom_port(self, mock_start_server):
         """Test serve command with custom port."""
         result = self.runner.invoke(cli, ['serve', '--port', '8080', '--host', '0.0.0.0', '-v'])
@@ -357,7 +357,7 @@ class TestCLI:
         
         assert result.exit_code != 0
 
-    @patch('src.reviews_tool.cli.IOSScraper')
+    @patch('reviews_tool.cli.IOSScraper')
     def test_search_ios_bundle_id(self, mock_ios_class):
         """Test iOS search with bundle ID format."""
         mock_scraper = Mock()
@@ -375,7 +375,7 @@ class TestCLI:
         call_args = mock_scraper.search_reviews.call_args
         assert call_args[1]['app_id'] == 'com.company.AppName'
 
-    @patch('src.reviews_tool.cli.AndroidScraper')
+    @patch('reviews_tool.cli.AndroidScraper')
     def test_search_output_file_write_error(self, mock_android_class):
         """Test search command when output file cannot be written."""
         mock_scraper = Mock()
@@ -394,7 +394,7 @@ class TestCLI:
         assert result.exit_code == 1
         assert "No such file or directory" in result.output
 
-    @patch('src.reviews_tool.cli.AndroidScraper')
+    @patch('reviews_tool.cli.AndroidScraper')
     def test_search_concurrent_requests_safety(self, mock_android_class):
         """Test that search command handles scraper rate limiting."""
         mock_scraper = Mock()
@@ -417,7 +417,7 @@ class TestCLI:
         # Should still return valid JSON despite delay
         json.loads(result.output)
 
-    @patch('src.reviews_tool.cli.AndroidScraper')
+    @patch('reviews_tool.cli.AndroidScraper')
     def test_search_response_serialization(self, mock_android_class):
         """Test that all response fields are properly serialized to JSON."""
         mock_scraper = Mock()

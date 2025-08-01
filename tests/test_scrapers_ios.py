@@ -109,7 +109,7 @@ class TestIOSScraper:
         mock_response_200.status_code = 200
         
         with patch.object(self.scraper.session, 'get', side_effect=[mock_response_429, mock_response_200]), \
-             patch('src.reviews_tool.scrapers.ios.exponential_backoff'):
+             patch('reviews_tool.scrapers.ios.exponential_backoff'):
             
             result = self.scraper._make_request("https://example.com")
             
@@ -264,7 +264,7 @@ class TestIOSScraper:
             
             assert reviews == []
 
-    @patch('src.reviews_tool.scrapers.ios.validate_app_id')
+    @patch('reviews_tool.scrapers.ios.validate_app_id')
     def test_search_reviews_invalid_bundle_id(self, mock_validate):
         """Test search with invalid bundle ID that can't be found."""
         mock_validate.return_value = False
@@ -313,7 +313,7 @@ class TestIOSScraper:
         mock_get_app_info.assert_called_once_with("310633997", "us")
         mock_get_reviews.assert_called()
 
-    @patch('src.reviews_tool.scrapers.ios.validate_app_id')
+    @patch('reviews_tool.scrapers.ios.validate_app_id')
     @patch.object(IOSScraper, '_search_app_by_bundle_id')
     @patch.object(IOSScraper, '_get_app_info_by_id')
     @patch.object(IOSScraper, '_get_reviews_from_rss')
@@ -438,7 +438,7 @@ class TestIOSScraper:
         assert result.reviews == []
         assert result.total_reviews is None
 
-    @patch('src.reviews_tool.scrapers.ios.time.sleep')
+    @patch('reviews_tool.scrapers.ios.time.sleep')
     def test_rate_limiting_sleep_called(self, mock_sleep):
         """Test that rate limiting actually calls sleep when needed."""
         # Make two rapid calls

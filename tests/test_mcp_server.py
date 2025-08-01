@@ -75,8 +75,8 @@ class TestReviewsToolMCPServer:
         assert minimal_args.sort == "newest"
 
     @pytest.mark.asyncio
-    @patch('src.reviews_tool.mcp_server.AndroidScraper')
-    @patch('src.reviews_tool.mcp_server.validate_app_id')
+    @patch('reviews_tool.mcp_server.AndroidScraper')
+    @patch('reviews_tool.mcp_server.validate_app_id')
     async def test_search_reviews_android_success(self, mock_validate, mock_android_class):
         """Test successful Android review search."""
         # Setup mocks
@@ -109,8 +109,8 @@ class TestReviewsToolMCPServer:
         assert response_data["reviews"][0]["rating"] == 5
 
     @pytest.mark.asyncio
-    @patch('src.reviews_tool.mcp_server.IOSScraper')
-    @patch('src.reviews_tool.mcp_server.validate_app_id')
+    @patch('reviews_tool.mcp_server.IOSScraper')
+    @patch('reviews_tool.mcp_server.validate_app_id')
     async def test_search_reviews_ios_success(self, mock_validate, mock_ios_class):
         """Test successful iOS review search."""
         # Setup mocks
@@ -144,7 +144,7 @@ class TestReviewsToolMCPServer:
         assert response_data["app_name"] == "iOS Test App"
 
     @pytest.mark.asyncio
-    @patch('src.reviews_tool.mcp_server.validate_app_id')
+    @patch('reviews_tool.mcp_server.validate_app_id')
     async def test_search_reviews_invalid_app_id(self, mock_validate):
         """Test search with invalid app ID."""
         mock_validate.return_value = False
@@ -160,8 +160,8 @@ class TestReviewsToolMCPServer:
         assert "Error: Invalid app ID format" in content.text
 
     @pytest.mark.asyncio
-    @patch('src.reviews_tool.mcp_server.validate_language_code')
-    @patch('src.reviews_tool.mcp_server.validate_app_id')
+    @patch('reviews_tool.mcp_server.validate_language_code')
+    @patch('reviews_tool.mcp_server.validate_app_id')
     async def test_search_reviews_invalid_language(self, mock_validate_app, mock_validate_lang):
         """Test search with invalid language code."""
         mock_validate_app.return_value = True
@@ -179,9 +179,9 @@ class TestReviewsToolMCPServer:
         assert "Error: Invalid language code" in content.text
 
     @pytest.mark.asyncio
-    @patch('src.reviews_tool.mcp_server.validate_country_code')
-    @patch('src.reviews_tool.mcp_server.validate_language_code')
-    @patch('src.reviews_tool.mcp_server.validate_app_id')
+    @patch('reviews_tool.mcp_server.validate_country_code')
+    @patch('reviews_tool.mcp_server.validate_language_code')
+    @patch('reviews_tool.mcp_server.validate_app_id')
     async def test_search_reviews_invalid_country(self, mock_validate_app, mock_validate_lang, mock_validate_country):
         """Test search with invalid country code."""
         mock_validate_app.return_value = True
@@ -214,8 +214,8 @@ class TestReviewsToolMCPServer:
         assert "Error searching reviews:" in content.text
 
     @pytest.mark.asyncio
-    @patch('src.reviews_tool.mcp_server.AndroidScraper')
-    @patch('src.reviews_tool.mcp_server.validate_app_id')
+    @patch('reviews_tool.mcp_server.AndroidScraper')
+    @patch('reviews_tool.mcp_server.validate_app_id')
     async def test_search_reviews_scraper_exception(self, mock_validate, mock_android_class):
         """Test search when scraper raises exception."""
         mock_validate.return_value = True
@@ -235,8 +235,8 @@ class TestReviewsToolMCPServer:
         assert "Invalid app ID" in content.text
 
     @pytest.mark.asyncio
-    @patch('src.reviews_tool.mcp_server.AndroidScraper')
-    @patch('src.reviews_tool.mcp_server.validate_app_id')
+    @patch('reviews_tool.mcp_server.AndroidScraper')
+    @patch('reviews_tool.mcp_server.validate_app_id')
     async def test_search_reviews_with_all_filters(self, mock_validate, mock_android_class):
         """Test search with all available filters."""
         mock_validate.return_value = True
@@ -256,8 +256,8 @@ class TestReviewsToolMCPServer:
         }
         
         # Mock all validation functions
-        with patch('src.reviews_tool.mcp_server.validate_language_code', return_value=True), \
-             patch('src.reviews_tool.mcp_server.validate_country_code', return_value=True):
+        with patch('reviews_tool.mcp_server.validate_language_code', return_value=True), \
+             patch('reviews_tool.mcp_server.validate_country_code', return_value=True):
             
             result = await self.server._search_reviews(arguments)
             
@@ -272,8 +272,8 @@ class TestReviewsToolMCPServer:
             # Note: sort parameter is not currently passed to scrapers
 
     @pytest.mark.asyncio
-    @patch('src.reviews_tool.mcp_server.AndroidScraper')
-    @patch('src.reviews_tool.mcp_server.validate_app_id')
+    @patch('reviews_tool.mcp_server.AndroidScraper')
+    @patch('reviews_tool.mcp_server.validate_app_id')
     async def test_search_reviews_empty_results(self, mock_validate, mock_android_class):
         """Test search that returns empty results."""
         mock_validate.return_value = True
@@ -302,8 +302,8 @@ class TestReviewsToolMCPServer:
         assert response_data["reviews_fetched"] == 0
 
     @pytest.mark.asyncio
-    @patch('src.reviews_tool.mcp_server.AndroidScraper') 
-    @patch('src.reviews_tool.mcp_server.validate_app_id')
+    @patch('reviews_tool.mcp_server.AndroidScraper') 
+    @patch('reviews_tool.mcp_server.validate_app_id')
     async def test_search_reviews_with_developer_response(self, mock_validate, mock_android_class):
         """Test search with review that has developer response."""
         mock_validate.return_value = True
@@ -365,7 +365,7 @@ class TestReviewsToolMCPServer:
         assert "Error searching reviews:" in content.text
 
     @pytest.mark.asyncio
-    @patch('src.reviews_tool.mcp_server.stdio_server')
+    @patch('reviews_tool.mcp_server.stdio_server')
     async def test_main_server_function(self, mock_stdio_server):
         """Test main server function."""
         # Create mock streams
@@ -380,7 +380,7 @@ class TestReviewsToolMCPServer:
             mock_server_instance.server.run = AsyncMock()
             mock_server_instance.server.get_capabilities = Mock(return_value={})
             
-            with patch('src.reviews_tool.mcp_server.ReviewsToolMCPServer', return_value=mock_server_instance):
+            with patch('reviews_tool.mcp_server.ReviewsToolMCPServer', return_value=mock_server_instance):
                 # This would normally run forever, so we'll just test initialization
                 try:
                     # Set a short timeout to avoid hanging

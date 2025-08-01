@@ -126,7 +126,7 @@ class TestAndroidScraper:
         assert review.version is None
         assert review.developer_response is None
 
-    @patch('src.reviews_tool.scrapers.android.gps_app')
+    @patch('reviews_tool.scrapers.android.gps_app')
     def test_get_app_info_success(self, mock_gps_app):
         """Test successful app info retrieval."""
         mock_app_data = {
@@ -147,7 +147,7 @@ class TestAndroidScraper:
         assert app_info["total_ratings"] == 1000000
         assert app_info["installs"] == "5,000,000,000+"
 
-    @patch('src.reviews_tool.scrapers.android.gps_app')
+    @patch('reviews_tool.scrapers.android.gps_app')
     def test_get_app_info_error(self, mock_gps_app):
         """Test app info retrieval with error."""
         mock_gps_app.side_effect = Exception("Network error")
@@ -156,7 +156,7 @@ class TestAndroidScraper:
         
         assert app_info == {}
 
-    @patch('src.reviews_tool.scrapers.android.validate_app_id')
+    @patch('reviews_tool.scrapers.android.validate_app_id')
     def test_search_reviews_invalid_app_id(self, mock_validate):
         """Test search with invalid app ID."""
         mock_validate.return_value = False
@@ -164,8 +164,8 @@ class TestAndroidScraper:
         with pytest.raises(ValueError, match="Invalid Android app ID format"):
             self.scraper.search_reviews("invalid_id")
 
-    @patch('src.reviews_tool.scrapers.android.gps_reviews')
-    @patch('src.reviews_tool.scrapers.android.validate_app_id')
+    @patch('reviews_tool.scrapers.android.gps_reviews')
+    @patch('reviews_tool.scrapers.android.validate_app_id')
     @patch.object(AndroidScraper, '_get_app_info')
     def test_search_reviews_success(self, mock_get_app_info, mock_validate, mock_gps_reviews):
         """Test successful review search."""
@@ -208,8 +208,8 @@ class TestAndroidScraper:
             continuation_token=None
         )
 
-    @patch('src.reviews_tool.scrapers.android.gps_reviews')
-    @patch('src.reviews_tool.scrapers.android.validate_app_id')
+    @patch('reviews_tool.scrapers.android.gps_reviews')
+    @patch('reviews_tool.scrapers.android.validate_app_id')
     @patch.object(AndroidScraper, '_get_app_info')
     def test_search_reviews_with_rating_filter(self, mock_get_app_info, mock_validate, mock_gps_reviews):
         """Test review search with rating filter."""
@@ -233,8 +233,8 @@ class TestAndroidScraper:
         assert result.reviews[0].rating == 5
         assert result.filters_applied == {"rating": 5}
 
-    @patch('src.reviews_tool.scrapers.android.gps_reviews')
-    @patch('src.reviews_tool.scrapers.android.validate_app_id')
+    @patch('reviews_tool.scrapers.android.gps_reviews')
+    @patch('reviews_tool.scrapers.android.validate_app_id')
     @patch.object(AndroidScraper, '_get_app_info')
     def test_search_reviews_with_date_filter(self, mock_get_app_info, mock_validate, mock_gps_reviews):
         """Test review search with date filters."""
@@ -257,8 +257,8 @@ class TestAndroidScraper:
         assert len(result.reviews) == 1
         assert result.reviews[0].date == datetime(2023, 12, 1)
 
-    @patch('src.reviews_tool.scrapers.android.gps_reviews')
-    @patch('src.reviews_tool.scrapers.android.validate_app_id')
+    @patch('reviews_tool.scrapers.android.gps_reviews')
+    @patch('reviews_tool.scrapers.android.validate_app_id')
     @patch.object(AndroidScraper, '_get_app_info')
     def test_search_reviews_with_dev_response_filter(self, mock_get_app_info, mock_validate, mock_gps_reviews):
         """Test review search with developer response filter."""
@@ -290,8 +290,8 @@ class TestAndroidScraper:
         assert len(result_without_response.reviews) == 1
         assert result_without_response.reviews[0].developer_response is None
 
-    @patch('src.reviews_tool.scrapers.android.gps_reviews')
-    @patch('src.reviews_tool.scrapers.android.validate_app_id')
+    @patch('reviews_tool.scrapers.android.gps_reviews')
+    @patch('reviews_tool.scrapers.android.validate_app_id')
     @patch.object(AndroidScraper, '_get_app_info')
     def test_search_reviews_pagination(self, mock_get_app_info, mock_validate, mock_gps_reviews):
         """Test review search with pagination."""
@@ -322,8 +322,8 @@ class TestAndroidScraper:
             continuation_token="existing_token"
         )
 
-    @patch('src.reviews_tool.scrapers.android.gps_reviews')
-    @patch('src.reviews_tool.scrapers.android.validate_app_id')
+    @patch('reviews_tool.scrapers.android.gps_reviews')
+    @patch('reviews_tool.scrapers.android.validate_app_id')
     @patch.object(AndroidScraper, '_get_app_info')
     def test_search_reviews_error_handling(self, mock_get_app_info, mock_validate, mock_gps_reviews):
         """Test review search error handling."""
@@ -341,9 +341,9 @@ class TestAndroidScraper:
 
     def test_search_reviews_limit_enforcement(self):
         """Test that the limit is properly enforced."""
-        with patch('src.reviews_tool.scrapers.android.validate_app_id', return_value=True), \
+        with patch('reviews_tool.scrapers.android.validate_app_id', return_value=True), \
              patch.object(self.scraper, '_get_app_info', return_value={}), \
-             patch('src.reviews_tool.scrapers.android.gps_reviews') as mock_gps_reviews:
+             patch('reviews_tool.scrapers.android.gps_reviews') as mock_gps_reviews:
             
             # Create more reviews than the limit
             many_reviews = [dict(self.sample_raw_review, reviewId=f"review_{i}") for i in range(10)]
@@ -355,7 +355,7 @@ class TestAndroidScraper:
             assert len(result.reviews) == 3
             assert result.total_reviews == 10
 
-    @patch('src.reviews_tool.scrapers.android.time.sleep')
+    @patch('reviews_tool.scrapers.android.time.sleep')
     def test_rate_limiting_sleep_called(self, mock_sleep):
         """Test that rate limiting actually calls sleep when needed."""
         # Make two rapid calls
