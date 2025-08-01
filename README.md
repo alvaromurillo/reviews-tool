@@ -12,8 +12,44 @@ A Python tool for fetching app reviews from Google Play Store (Android) and App 
 
 ## Installation
 
+### From PyPI (Coming Soon)
 ```bash
+pip install reviews-tool
+```
+
+### From Source
+```bash
+git clone https://github.com/alvaromurillo/reviews-tool.git
+cd reviews-tool
 pip install -r requirements.txt
+pip install -e .
+```
+
+## Development Setup
+
+To set up the development environment, you need to create a virtual environment and install the required dependencies.
+
+1.  **Create and activate a virtual environment:**
+
+    ```bash
+    python3 -m venv venv
+    source venv/bin/activate
+    ```
+
+2.  **Install dependencies:**
+
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+Now you can run the tool and the tests within this activated environment.
+
+## Running Tests
+
+To run the test suite, make sure you have the virtual environment activated and run:
+
+```bash
+pytest
 ```
 
 ## Usage
@@ -63,34 +99,61 @@ reviews-tool serve --port 8000
 
 ## Output Format
 
-The tool returns a JSON array with the following structure:
+The tool returns a JSON object with the following structure:
 
+### Android Example
 ```json
 {
-  "app_id": "com.example.app",
+  "app_id": "com.whatsapp",
+  "app_name": "WhatsApp Messenger",
   "store": "android",
-  "total_reviews": 45,
+  "total_reviews": 6,
+  "reviews_fetched": 2,
+  "next_page_token": "<continuation_token>",
+  "filters_applied": {},
+  "timestamp": "2025-08-01T19:19:24.147005",
   "reviews": [
     {
+      "id": "aa21be45-8c87-4794-ad84-1a4da3155e1f",
+      "user_name": "Theodora Moyo",
       "rating": 5,
-      "text": "Great app! Love the new features.",
-      "date": "2024-01-15T10:30:00Z",
-      "user": "john_doe",
-      "app_version": "2.1.0",
-      "developer_response": null,
-      "store": "android"
-    },
+      "title": null,
+      "text": "Very good app. keep me connected with my friend and family...",
+      "date": "2025-07-31T19:09:10",
+      "helpful_count": 0,
+      "language": null,
+      "country": null,
+      "version": "2.25.11.75",
+      "developer_response": null
+    }
+  ]
+}
+```
+
+### iOS Example
+```json
+{
+  "app_id": "310633997",
+  "app_name": "WhatsApp Messenger",
+  "store": "ios",
+  "total_reviews": 50,
+  "reviews_fetched": 2,
+  "next_page_token": "3",
+  "filters_applied": {},
+  "timestamp": "2025-08-01T19:19:30.930237",
+  "reviews": [
     {
-      "rating": 4,
-      "text": "Good app but could use improvements in UI.",
-      "date": "2024-01-14T15:45:00Z", 
-      "user": "jane_smith",
-      "app_version": "2.1.0",
-      "developer_response": {
-        "text": "Thank you for the feedback! We're working on UI improvements.",
-        "date": "2024-01-15T09:00:00Z"
-      },
-      "store": "android"
+      "id": "ios_137760121362959920_1754068770",
+      "user_name": "Laweezy reviews",
+      "rating": 5,
+      "title": "Excellent",
+      "text": "I love the great job from your company at the moment please keep it up",
+      "date": "2025-08-01T19:19:30.921529",
+      "helpful_count": null,
+      "language": null,
+      "country": "US",
+      "version": "25.21.3",
+      "developer_response": null
     }
   ]
 }

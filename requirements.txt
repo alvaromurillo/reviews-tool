@@ -1,0 +1,23 @@
+# Core dependencies
+requests>=2.31.0
+beautifulsoup4>=4.12.0
+click>=8.1.0
+pydantic>=2.0.0
+google-play-scraper>=1.2.0
+
+# MCP server
+mcp>=0.1.0
+
+# Development and testing
+pytest>=7.0.0
+pytest-asyncio>=0.21.0
+
+# Code quality
+flake8>=6.0.0
+black>=23.0.0
+mypy>=1.0.0
+
+# Additional useful packages
+lxml>=4.9.0  # For faster XML/HTML parsing
+python-dateutil>=2.8.0  # For date parsing
+aiohttp>=3.8.0  # For async HTTP requests in MCP server
